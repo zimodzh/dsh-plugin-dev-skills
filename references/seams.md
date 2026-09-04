@@ -97,6 +97,7 @@ DSH 的每一部分都是插件：模型适配器、工具注册表、会话日�
 | 拦截请求、工具或轮次 | 使用相应的 agent/* 或 tools/* 事件；agent/turn-stopping 会停止轮次 |
 | 添加模型可见上下文 | 调用 agent.inject()；它落到下一次获准的请求中 |
 | 添加 UI 或编辑器集成 | 驱动 ctx.agents 并从 session/event 渲染 |
+| 添加浏览器半设置面板 | 浏览器半注册 React 组件到 settings.section 等 slot；调主进程方法走 `ctx.connection.rpc.handle/call`（见 references/connection-rpc.md），**不要**用 `@Remote` |
 | 添加 Web Client Chat 节点 | 注册 ConversationNodeDefinition + keyed renderer |
 | 添加持久会话状态 | 扩展 SessionEventMap；从日志渲染和回放 |
 | 生成会话标题 | 注册唯一的 ctx.sessionTitle 提供方 |

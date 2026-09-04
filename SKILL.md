@@ -28,6 +28,7 @@ metadata:
 6. **配置一律 Schemastery。** 导出 interface Config 与同名 Schema，默认值写在 schema 里；不导出普通对象充当 Config；凡不同部署可能改值的参数都必须进配置。
 7. **工具 execute 返回规范 JSON 值，不返回内容块。** 面向人类的文本放 output.render；部署策略/钩子不要内建进工具体。
 8. **模型可见即已记录。** 新增任何模型可见输入，都要落在会话日志可重建的机制里（新增持久事件或经 agent.inject()），并有运行时不变式断言。
+9. **浏览器半调主进程方法走 `ctx.connection.rpc`。** 跨 host/client 半暴露方法必须经 Connection RPC 通道（`ctx.connection.rpc.handle` + `ctx.connection.rpc.call`），样板见 references/connection-rpc.md。**不要**用 `@deepseek-ai/dsh-typert-protocol` 的 `@Remote`/`TypertRemoteService`——`@Remote` 把方法标记写入模块级 `WeakMap`，要求两边加载同一个 module 实例，npm 分发场景无法满足；这是已经踩过的坑。
 
 ## 标准工作流
 
@@ -98,6 +99,7 @@ pnpm dsh web --patch ./scratch-plugin/cordis.yml   # 打开 http://127.0.0.1:308
 | 查内置服务 / 归属位置 | seam 目录、架构映射 | references/seams.md |
 | 作用域/服务存储/Fiber API | ctx.extend/isolate/provide/mixin、fiber.* | references/context-api.md |
 | 钩子 / UI / 协议桥插件 | 四种扩展形态 + 功能→机制映射 | references/plugin-forms.md |
+| 浏览器半面板调主进程服务 | `ctx.connection.rpc.handle/call`，endpoint + 信封 | references/connection-rpc.md |
 | 在仓库内新建包 / 命名 | workspace 包清单 + 角色词表 | references/workspace-package.md |
 
 ## 完成前检查清单
@@ -111,6 +113,7 @@ pnpm dsh web --patch ./scratch-plugin/cordis.yml   # 打开 http://127.0.0.1:308
 - [ ] 有 LLM 适配器：StreamChunk 协议完整（块配对、index 按首次出现、usage 在 finish 前、arguments 全程原始 JSON 字符串）；错误走两条合法路径之一；不支持的字段抛 UNSUPPORTED；需要原生回放时发 finish.replayState；传了 attributionHeaders 与 signal。
 - [ ] 组合行与层序正确；新增行在 --dump-config 中可见；HMR/重启后无残留注册。
 - [ ] 若模型可见内容变化：落在日志可重建的机制内。
+- [ ] 浏览器半调主进程方法：走 `ctx.connection.rpc.handle/call`，**不**用 `@Remote`/手写 typert manifest/源码树桥接。
 - [ ] 新建 workspace 包：package.json 不变式、恰一个 aggregate、命名符合角色词表、README 有 Model Experience 结构，且 constraints/typecheck/lint/build/hygiene 全绿。
 
 ## 参考文件（按需加载，不要一次全读）
@@ -126,6 +129,7 @@ pnpm dsh web --patch ./scratch-plugin/cordis.yml   # 打开 http://127.0.0.1:308
 - references/tools.md —— 开发模型工具时读
 - references/llm-adapter.md —— 接入新模型提供方时读
 - references/plugin-forms.md —— 写钩子/UI/协议桥插件时读
+- references/connection-rpc.md —— 浏览器半面板要调主进程服务方法时读；遇到 `@Remote` / `TypertRemoteService` 时也读
 - references/packaging.md —— 打包安装、交付 plugin 时读
 - references/workspace-package.md —— 在 monorepo 内新建包时读
 - references/seams.md —— 查内置服务、归属位置或架构映射时读

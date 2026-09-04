@@ -1,13 +1,16 @@
 # 插件形态扩展与功能映射
 
-harness 扩展的参考模式。代码片段省略了 import 和辅助实现，无法直接复制运行；具体编写路径见本技能的 plugin-anatomy / tools / llm-adapter 与 SKILL.md 各场景。
+harness 扩展的参考模式。代码片段省略了 import 和辅助实现，无法直接复制运行；具体编写路径见本技能的 plugin-anatomy / tools / llm-adapter / connection-rpc 与 SKILL.md 各场景。
 
-## 四种扩展形态
+## 五种扩展形态
 
 1. **工具插件** —— 在 ctx.tools 上注册。第一方工具用类型化的 defineTool（execute 参数类型化、结果构造、run_in_background 模式），也可直接注册原始 JSON Schema ToolDefinition（MCP 来源的工具就是这样到达的）。
 2. **钩子插件** —— 在拦截点上运行的普通 Cordis 插件，不需要外部协议（「原生钩子」）。钩子插件本身并不等同于权限门禁；沙箱、权限和 plan-mode 插件也使用这些扩展点。
-3. **UI 插件** —— 从 session/event 事件流渲染（助手 token 流以 assistant/chunk 到达，加上轮次/步骤边界与工具活动），并通过 agent.followup() / agent.steer() 把输入驱动回去。浏览器插件向内建 Web Client 贡献业务行时，注册 ConversationNodeDefinition 与 keyed Chat renderer。
-4. **外部协议驱动** —— 将协议对端接入 ctx.agents，可服务 UI 或自动化客户端。packages/acp/acp 是仅面向自动化的完整示例（ACP JSON-RPC stdio）。
+3. **UI 插件（聊天侧）** —— 从 session/event 事件流渲染（助手 token 流以 assistant/chunk 到达，加上轮次/步骤边界与工具活动），并通过 agent.followup() / agent.steer() 把输入驱动回去。浏览器插件向内建 Web Client 贡献业务行时，注册 ConversationNodeDefinition 与 keyed Chat renderer。
+4. **浏览器半面板插件（设置/管理侧）** —— 插件同时拥有主进程半与浏览器半（dsh.client.inject 入口）。浏览器半注册 React 面板（settings.section / 其他 slot），主进程半把方法经 `ctx.connection.rpc.handle('/<channel>', dispatch, {authority:'loopback'})` 暴露给浏览器调用。`dispatch` 是单 switch；端点失败用 `RpcResult` 信封返回而不是 throw。完整样板见 references/connection-rpc.md。
+5. **外部协议驱动** —— 将协议对端接入 ctx.agents，可服务 UI 或自动化客户端。packages/acp/acp 是仅面向自动化的完整示例（ACP JSON-RPC stdio）。
+
+> 第 3 类 UI 插件是「聊天侧」——给 Chat 业务节点贡献分片。第 4 类是「设置侧」——给设置/管理面板暴露主进程方法。两类都涉及浏览器半，但通信机制不同：聊天侧走 `session/event` 流，浏览器半面板走 `ctx.connection.rpc`。**不要把第 4 类混进第 3 类**——不要用 `@Remote` 或 `TypertRemoteService` 跨两边暴露方法（详见 references/connection-rpc.md 第一节）。
 
 ## 钩子插件（以权限门禁为例）
 
@@ -62,6 +65,64 @@ export function apply(ctx: Context) {
   })))
 }
 ```
+
+## 浏览器半面板插件（settings.section 等 slot）
+
+主进程半在 `apply()` 里挂 `ctx.connection.rpc.handle`：
+
+```ts
+import type { Context } from '@deepseek-ai/cordis'
+import { dispatch, RPC_CHANNEL } from './host/rpc.ts'
+import { YourService } from './host/service.ts'
+
+export const name = 'your-plugin'
+export const inject = ['connection']
+export async function apply(ctx: Context) {
+  const service = new YourService(ctx)
+  ctx.inject(['connection'], () => {
+    ctx.effect(() => {
+      const handler = async (endpoint: string, payload: unknown) =>
+        dispatch(service, endpoint, payload)
+      const disposer = ctx.connection.rpc.handle(RPC_CHANNEL, handler, { authority: 'loopback' })
+      // disposer 形状跨实现不一致，统一兼容
+      return () => {
+        Promise.resolve(disposer).then((d) => {
+          if (typeof d === 'function') d()
+          else if (d !== null && typeof d === 'object' && 'dispose' in d) {
+            (d as { dispose: () => void }).dispose()
+          }
+        }).catch(() => {})
+      }
+    }, 'your-plugin: rpc channel')
+  })
+}
+```
+
+浏览器半注册 React 组件并直接调 host RPC：
+
+```ts
+// src/client/index.ts —— dsh.client.inject 的另一个 apply
+export async function apply(ctx: { /* slots/connection/locale */ }) {
+  ctx.slots.inject('settings.section', () =>
+    ctx.slots.register(
+      { name: 'settings.section', id: 'your-plugin', order: 40, inject: () => ({ ctx }) },
+      YourSettingsSection,
+    ),
+  )
+}
+```
+
+```tsx
+// src/client/YourSettingsSection.tsx
+import { callRpc } from './rpc.ts'
+export function YourSettingsSection({ ctx }: { ctx: ClientContext }) {
+  const [view, setView] = useState<YourView | null>(null)
+  useEffect(() => { callRpc<YourView>(ctx, 'list').then(setView).catch(console.error) }, [])
+  // ...
+}
+```
+
+完整样板、endpoint 联合、`RpcResult<T>` 信封、错误类、`ctx.connection` 结构化强转、disposer 三种返回形状兼容、迁移检查清单见 references/connection-rpc.md。
 
 ## 外部协议驱动
 

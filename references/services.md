@@ -103,3 +103,16 @@ plugin-a 与 plugin-b 各自看到组内 Bash 实例，互不影响。preset 自
 ## Harness 内置服务
 
 服务名、公开方法和源码位置由仓库自动生成到各子系统的页面（含 cordis-surface 区块）。开发插件时应以这些生成区块和服务的 TypeScript 接口为准，不要维护另一份静态清单。常用 ctx 键与归属见 references/seams.md。
+
+## 何时不该用普通 Service
+
+普通 Cordis `Service` 服务的是「同进程内、被主进程半的注入消费方调用」。两类**反向**调用要用别的机制：
+
+- **浏览器半（设置面板、可视化编辑）要调主进程方法**——用 `ctx.connection.rpc.handle/call`，把方法挂到一根 `/<channel>` 上、暴露 endpoint + payload + 信封。样板见 references/connection-rpc.md。**不要**用 `@deepseek-ai/dsh-typert-protocol` 的 `@Remote`/`TypertRemoteService`：`@Remote` 把方法标记写入模块级 `WeakMap`，npm 分发场景下主进程与浏览器加载的不是同一个 module 实例，标记不可见。
+- **其他主进程插件以事件方式响应**——`ctx.on(...)`（见 references/events.md），不是 Service。
+
+判定顺序：
+
+1. 消费方是同进程主进程半插件 → 普通 Service 或事件
+2. 消费方是浏览器半（设置面板）→ `ctx.connection.rpc`
+3. 跨进程/跨语言 → ACP / JSON-RPC stdio
