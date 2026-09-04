@@ -28,7 +28,7 @@ metadata:
 6. **配置一律 Schemastery。** 导出 interface Config 与同名 Schema，默认值写在 schema 里；不导出普通对象充当 Config；凡不同部署可能改值的参数都必须进配置。
 7. **工具 execute 返回规范 JSON 值，不返回内容块。** 面向人类的文本放 output.render；部署策略/钩子不要内建进工具体。
 8. **模型可见即已记录。** 新增任何模型可见输入，都要落在会话日志可重建的机制里（新增持久事件或经 agent.inject()），并有运行时不变式断言。
-9. **npm 设置面板优先 `ctx.connection.rpc`。** 浏览器半设置面板调主进程方法，优先走 Connection RPC（`ctx.connection.rpc.handle` + `ctx.connection.rpc.call`），样板见 references/connection-rpc.md。禁止裸 `@Remote`、手写 typert manifest、`createRequire` 挂 harness 源码。完整 Typert generator 产出并经 `package.json` 导出 `./remote` 的路径仍然合法。
+9. **npm 设置面板优先 `ctx.connection.rpc`。** 浏览器半设置面板调主进程方法，优先走 Connection RPC（`ctx.connection.rpc.handle` + `ctx.connection.rpc.call`），样板见 references/connection-rpc.md。禁止裸 `@Remote`、手写 typert manifest、`createRequire` 挂 harness 源码。完整 Typert generator 产出并经 `package.json` 导出 `./typert` + `./remote`、由 `ctx.remote.$mount()` 消费的路径仍然合法。
 
 ## 标准工作流
 
@@ -113,7 +113,7 @@ pnpm dsh web --patch ./scratch-plugin/cordis.yml   # 打开 http://127.0.0.1:308
 - [ ] 有 LLM 适配器：StreamChunk 协议完整（块配对、index 按首次出现、usage 在 finish 前、arguments 全程原始 JSON 字符串）；错误走两条合法路径之一；不支持的字段抛 UNSUPPORTED；需要原生回放时发 finish.replayState；传了 attributionHeaders 与 signal。
 - [ ] 组合行与层序正确；新增行在 --dump-config 中可见；HMR/重启后无残留注册。
 - [ ] 若模型可见内容变化：落在日志可重建的机制内。
-- [ ] 浏览器半设置面板：优先 `ctx.connection.rpc.handle/call`；禁止裸 `@Remote`、手写 typert manifest、`createRequire` 挂 harness 源码；完整 Typert generator + `./remote` 产物仍合法。
+- [ ] 浏览器半设置面板：优先 `ctx.connection.rpc.handle/call`；禁止裸 `@Remote`、手写 typert manifest、`createRequire` 挂 harness 源码；完整 Typert generator + `./typert` + `./remote` 产物仍合法。
 - [ ] 新建 workspace 包：package.json 不变式、恰一个 aggregate、命名符合角色词表、README 有 Model Experience 结构，且 constraints/typecheck/lint/build/hygiene 全绿。
 
 ## 参考文件（按需加载，不要一次全读）

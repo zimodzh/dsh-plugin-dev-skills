@@ -108,11 +108,11 @@ plugin-a 与 plugin-b 各自看到组内 Bash 实例，互不影响。preset 自
 
 普通 Cordis `Service` 服务的是「同进程内、被主进程半的注入消费方调用」。两类**反向**调用要用别的机制：
 
-- **浏览器半（设置面板、可视化编辑）要调主进程方法**——npm 分发场景**优先** `ctx.connection.rpc.handle/call`，把方法挂到一根 `/<channel>` 上、暴露 endpoint + payload + 信封。样板见 references/connection-rpc.md。禁止裸 `@Remote`、手写 typert manifest、`createRequire` 挂 harness 源码。完整 Typert generator + `./remote` 产物仍然合法。
+- **浏览器半（设置面板、可视化编辑）要调主进程方法**——npm 分发场景**优先** `ctx.connection.rpc.handle/call`，把方法挂到一根 `/<channel>` 上、暴露 endpoint + payload + 信封。样板见 references/connection-rpc.md。禁止裸 `@Remote`、手写 typert manifest、`createRequire` 挂 harness 源码。完整 Typert generator + `./typert` + `./remote` 产物仍然合法。
 - **其他主进程插件以事件方式响应**——`ctx.on(...)`（见 references/events.md），不是 Service。
 
 判定顺序：
 
 1. 消费方是同进程主进程半插件 → 普通 Service 或事件
-2. 消费方是浏览器半（设置面板）→ 优先 `ctx.connection.rpc`；完整 Typert `./remote` 仍合法
+2. 消费方是浏览器半（设置面板）→ 优先 `ctx.connection.rpc`；完整 Typert `./typert` + `./remote` 仍合法
 3. 跨进程/跨语言 → ACP / JSON-RPC stdio

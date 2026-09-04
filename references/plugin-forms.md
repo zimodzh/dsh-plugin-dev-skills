@@ -10,7 +10,7 @@ harness 扩展的参考模式。代码片段省略了 import 和辅助实现，�
 4. **浏览器半面板插件（设置/管理侧）** —— 插件同时拥有主进程半与浏览器半（dsh.client.inject 入口）。浏览器半注册 React 面板（settings.section / 其他 slot），主进程半把方法经 `ctx.connection.rpc.handle('/<channel>', dispatch, {authority:'loopback'})` 暴露给浏览器调用。`dispatch` 是单 switch；端点失败用 `RpcResult` 信封返回而不是 throw。完整样板见 references/connection-rpc.md。
 5. **外部协议驱动** —— 将协议对端接入 ctx.agents，可服务 UI 或自动化客户端。packages/acp/acp 是仅面向自动化的完整示例（ACP JSON-RPC stdio）。
 
-> 第 3 类 UI 插件是「聊天侧」——给 Chat 业务节点贡献分片。第 4 类是「设置侧」——给设置/管理面板暴露主进程方法。两类都涉及浏览器半，但通信机制不同：聊天侧走 `session/event` 流，npm 设置面板优先 `ctx.connection.rpc`。**不要把第 4 类混进第 3 类**。禁止裸 `@Remote`、手写 typert manifest、`createRequire` 挂 harness 源码；完整 Typert generator + `./remote` 仍合法（详见 references/connection-rpc.md）。
+> 第 3 类 UI 插件是「聊天侧」——给 Chat 业务节点贡献分片。第 4 类是「设置侧」——给设置/管理面板暴露主进程方法。两类都涉及浏览器半，但通信机制不同：聊天侧走 `session/event` 流，npm 设置面板优先 `ctx.connection.rpc`。**不要把第 4 类混进第 3 类**。禁止裸 `@Remote`、手写 typert manifest、`createRequire` 挂 harness 源码；完整 Typert generator + `./typert` + `./remote` 仍合法（详见 references/connection-rpc.md）。
 
 ## 钩子插件（以权限门禁为例）
 
@@ -113,7 +113,7 @@ export function YourSettingsSection({ ctx }: { ctx: ClientContext }) {
 }
 ```
 
-完整样板、endpoint 联合、`RpcResult<T>` 信封、错误类、`ctx.connection` 结构化强转、合法 Typert `./remote` 路径见 references/connection-rpc.md。
+完整样板、endpoint 联合、`RpcResult<T>` 信封、错误类、`ctx.connection` 结构化强转、合法 Typert `./typert` + `./remote` 路径见 references/connection-rpc.md。
 
 ## 外部协议驱动
 
