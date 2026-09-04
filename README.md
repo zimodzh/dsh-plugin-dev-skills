@@ -24,24 +24,24 @@ DSH 是一个插件化的 Agent Harness SDK：模型适配器、工具注册表�
 
 ```
 dsh-plugin-dev/
-├── SKILL.md      # 入口：frontmatter、8 条硬规则、6 个场景工作流、决策速查表、完成前检查清单
-├── references/   # 12 份详细标准，按需加载；索引见 references/README.md
+├── SKILL.md      # 入口：frontmatter、9 条硬规则、6 个场景工作流、决策速查表、完成前检查清单
+├── references/   # 13 份详细标准，按需加载；索引见 references/README.md
 ├── examples/     # 两个可复制、可运行的最小示例
 │   ├── hello-plugin/
 │   └── greet-tool/
 └── evals/        # description 的触发评测集与评测方法
 ```
 
-references 覆盖：插件形态与生命周期 · 服务与依赖注入 · 五种事件分发模式 · 插件配置 · 上下文/Fiber/注册表 API · 三种角色能力设计（Definition/Provider/Consumer）· 工具开发 · LLM 适配器协议 · 插件形态扩展（工具/钩子/UI/协议桥）· 打包与安装 · 仓库内 workspace 包 · 完整能力 seam 目录。
+references 覆盖：插件形态与生命周期 · 服务与依赖注入 · 五种事件分发模式 · 插件配置 · 上下文/Fiber/注册表 API · 三种角色能力设计（Definition/Provider/Consumer）· 工具开发 · LLM 适配器协议 · 五种插件形态（工具/钩子/UI/设置面板/协议桥）· 浏览器半 Connection RPC · 打包与安装 · 仓库内 workspace 包 · 完整能力 seam 目录。
 
 ## 目录结构
 
 ```
 dsh-plugin-dev/
-├── SKILL.md                        # 技能入口：frontmatter、8 条硬规则、6 个场景工作流、检查清单
+├── SKILL.md                        # 技能入口：frontmatter、9 条硬规则、6 个场景工作流、检查清单
 ├── LICENSE                         # MIT 许可证
 ├── README.md / README.en.md        # 本说明（中文主 / 英文附）
-├── references/                     # 12 份详细标准（渐进式披露，按需加载）
+├── references/                     # 13 份详细标准（渐进式披露，按需加载）
 │   ├── README.md / README.en.md    #   目录索引：文件｜内容｜何时读
 │   ├── plugin-anatomy.md           #   插件形态、生命周期、Fiber、自动清理、HMR
 │   ├── services.md                 #   服务定义/提供/消费、inject、隔离
@@ -51,7 +51,8 @@ dsh-plugin-dev/
 │   ├── three-roles.md              #   能力三种角色（seam）设计
 │   ├── tools.md                    #   工具开发完整约定
 │   ├── llm-adapter.md              #   LLM 适配器协议
-│   ├── plugin-forms.md             #   四种扩展形态 + 功能→机制映射
+│   ├── plugin-forms.md             #   五种扩展形态 + 功能→机制映射
+│   ├── connection-rpc.md           #   浏览器半 Connection RPC；裸 @Remote 禁止，完整 Typert ./remote 仍合法
 │   ├── packaging.md                #   打包、安装与层序
 │   ├── workspace-package.md        #   monorepo 内新建包的清单与命名
 │   └── seams.md                    #   核心 seam 与能力服务全表、架构映射

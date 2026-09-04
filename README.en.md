@@ -24,25 +24,25 @@ DeepSeek Harness is a plugin-based SDK for building agent harnesses: model adapt
 
 ```
 dsh-plugin-dev/
-├── SKILL.md      # entry point: frontmatter, 8 hard rules, 6 scenario workflows,
+├── SKILL.md      # entry point: frontmatter, 9 hard rules, 6 scenario workflows,
 │                 # decision tables, and a pre-completion checklist
-├── references/   # 12 detailed standards, loaded on demand (index: references/README.md)
+├── references/   # 13 detailed standards, loaded on demand (index: references/README.md)
 ├── examples/     # two minimal, copy-and-run example plugins
 │   ├── hello-plugin/
 │   └── greet-tool/
 └── evals/        # trigger-evaluation set and methodology for the description
 ```
 
-The reference library covers: plugin anatomy & lifecycle · services & dependency injection · all five event dispatch modes · plugin configuration · Context/Fiber/registry APIs · three-role capability design (Definition/Provider/Consumer) · tool development · the LLM adapter protocol · plugin form extensions (tool/hook/UI/protocol bridge) · packaging & installation · in-repo workspace packages · the complete capability-seam catalog.
+The reference library covers: plugin anatomy & lifecycle · services & dependency injection · all five event dispatch modes · plugin configuration · Context/Fiber/registry APIs · three-role capability design (Definition/Provider/Consumer) · tool development · the LLM adapter protocol · five plugin forms (tool/hook/UI/settings panel/protocol bridge) · browser-half Connection RPC · packaging & installation · in-repo workspace packages · the complete capability-seam catalog.
 
 ## Directory structure
 
 ```
 dsh-plugin-dev/
-├── SKILL.md                        # skill entry: frontmatter, 8 hard rules, 6 scenario workflows, checklists
+├── SKILL.md                        # skill entry: frontmatter, 9 hard rules, 6 scenario workflows, checklists
 ├── LICENSE                         # MIT license
 ├── README.md / README.en.md        # this doc (Chinese primary / English secondary)
-├── references/                     # 12 detailed standards (progressive disclosure, on-demand)
+├── references/                     # 13 detailed standards (progressive disclosure, on-demand)
 │   ├── README.md / README.en.md    #   index: file | covers | when to read
 │   ├── plugin-anatomy.md           #   plugin shapes, lifecycle, Fiber, auto-cleanup, HMR
 │   ├── services.md                 #   defining/consuming services, inject, isolation
@@ -52,7 +52,8 @@ dsh-plugin-dev/
 │   ├── three-roles.md              #   three-role capability design
 │   ├── tools.md                    #   complete tool-development contract
 │   ├── llm-adapter.md              #   LLM adapter protocol
-│   ├── plugin-forms.md             #   four extension forms + feature→mechanism map
+│   ├── plugin-forms.md             #   five extension forms + feature→mechanism map
+│   ├── connection-rpc.md           #   browser-half Connection RPC; bare @Remote forbidden, full Typert ./remote still legal
 │   ├── packaging.md                #   packaging, install, layer order
 │   ├── workspace-package.md        #   in-monorepo package checklist & naming
 │   └── seams.md                    #   capability-seam catalog, architecture map
