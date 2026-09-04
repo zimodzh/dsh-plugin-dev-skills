@@ -53,7 +53,7 @@ dsh-plugin-dev/
 │   ├── tools.md                    #   complete tool-development contract
 │   ├── llm-adapter.md              #   LLM adapter protocol
 │   ├── plugin-forms.md             #   five extension forms + feature→mechanism map
-│   ├── connection-rpc.md           #   browser-half Connection RPC; bare @Remote forbidden, full Typert ./remote still legal
+│   ├── connection-rpc.md           #   browser-half Connection RPC; bare @Remote forbidden, full Typert ./typert + ./remote still legal
 │   ├── packaging.md                #   packaging, install, layer order
 │   ├── workspace-package.md        #   in-monorepo package checklist & naming
 │   └── seams.md                    #   capability-seam catalog, architecture map
