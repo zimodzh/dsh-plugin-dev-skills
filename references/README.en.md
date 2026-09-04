@@ -7,7 +7,7 @@
   </samp>
 </p>
 
-This directory is the skill's progressive-disclosure detail library: SKILL.md keeps only the hard rules, scenario workflows and checklists, while the concrete standards load on demand from these 12 files. Read just the file for the topic you're working on.
+This directory is the skill's progressive-disclosure detail library: SKILL.md keeps only the hard rules, scenario workflows and checklists, while the concrete standards load on demand from these 13 files. Read just the file for the topic you're working on.
 
 | File | Covers | Read it when |
 | --- | --- | --- |
@@ -19,7 +19,8 @@ This directory is the skill's progressive-disclosure detail library: SKILL.md ke
 | [three-roles.md](./three-roles.md) | Three-role capability design | splitting a swappable capability |
 | [tools.md](./tools.md) | Complete tool-development contract | developing a model-facing tool |
 | [llm-adapter.md](./llm-adapter.md) | LLM adapter protocol | adding a model provider |
-| [plugin-forms.md](./plugin-forms.md) | Four extension forms + feature→mechanism map | writing hook/UI/protocol-bridge plugins |
+| [plugin-forms.md](./plugin-forms.md) | Five extension forms + feature→mechanism map | writing hook/UI/settings-panel/protocol-bridge plugins |
+| [connection-rpc.md](./connection-rpc.md) | Browser ↔ host Connection RPC boilerplate, endpoint union, envelope; when Typert `./remote` stays legal | npm settings panels calling host methods; bare `@Remote` / handwritten manifests / `createRequire` source bridges |
 | [packaging.md](./packaging.md) | Packaging, install, layer order | packaging/installing a plugin |
 | [workspace-package.md](./workspace-package.md) | In-monorepo package checklist & naming | adding a package in the monorepo |
 | [seams.md](./seams.md) | Capability-seam catalog, architecture map | looking up built-in services/placement |
