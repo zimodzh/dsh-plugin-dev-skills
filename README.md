@@ -52,7 +52,7 @@ dsh-plugin-dev/
 │   ├── tools.md                    #   工具开发完整约定
 │   ├── llm-adapter.md              #   LLM 适配器协议
 │   ├── plugin-forms.md             #   五种扩展形态 + 功能→机制映射
-│   ├── connection-rpc.md           #   浏览器半 Connection RPC；裸 @Remote 禁止，完整 Typert ./remote 仍合法
+│   ├── connection-rpc.md           #   浏览器半 Connection RPC；裸 @Remote 禁止，完整 Typert ./typert + ./remote 仍合法
 │   ├── packaging.md                #   打包、安装与层序
 │   ├── workspace-package.md        #   monorepo 内新建包的清单与命名
 │   └── seams.md                    #   核心 seam 与能力服务全表、架构映射

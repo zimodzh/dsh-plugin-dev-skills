@@ -20,7 +20,7 @@ This directory is the skill's progressive-disclosure detail library: SKILL.md ke
 | [tools.md](./tools.md) | Complete tool-development contract | developing a model-facing tool |
 | [llm-adapter.md](./llm-adapter.md) | LLM adapter protocol | adding a model provider |
 | [plugin-forms.md](./plugin-forms.md) | Five extension forms + feature→mechanism map | writing hook/UI/settings-panel/protocol-bridge plugins |
-| [connection-rpc.md](./connection-rpc.md) | Browser ↔ host Connection RPC boilerplate, endpoint union, envelope; when Typert `./remote` stays legal | npm settings panels calling host methods; bare `@Remote` / handwritten manifests / `createRequire` source bridges |
+| [connection-rpc.md](./connection-rpc.md) | Browser ↔ host Connection RPC boilerplate, endpoint union, envelope; when Typert `./typert` + `./remote` stays legal | npm settings panels calling host methods; bare `@Remote` / handwritten manifests / `createRequire` source bridges |
 | [packaging.md](./packaging.md) | Packaging, install, layer order | packaging/installing a plugin |
 | [workspace-package.md](./workspace-package.md) | In-monorepo package checklist & naming | adding a package in the monorepo |
 | [seams.md](./seams.md) | Capability-seam catalog, architecture map | looking up built-in services/placement |

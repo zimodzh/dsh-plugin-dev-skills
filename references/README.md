@@ -20,7 +20,7 @@
 | [tools.md](./tools.md) | 工具开发完整约定 | 开发模型工具 |
 | [llm-adapter.md](./llm-adapter.md) | LLM 适配器协议 | 接入新模型提供方 |
 | [plugin-forms.md](./plugin-forms.md) | 五种扩展形态与功能→机制映射 | 写钩子/UI/面板/协议桥插件 |
-| [connection-rpc.md](./connection-rpc.md) | 浏览器半 ↔ 主进程 Connection RPC 样板、endpoint 联合、信封；完整 Typert `./remote` 仍合法 | npm 设置面板要调主进程方法时；遇到裸 `@Remote` / 手写 manifest / `createRequire` 源码桥时 |
+| [connection-rpc.md](./connection-rpc.md) | 浏览器半 ↔ 主进程 Connection RPC 样板、endpoint 联合、信封；完整 Typert `./typert` + `./remote` 仍合法 | npm 设置面板要调主进程方法时；遇到裸 `@Remote` / 手写 manifest / `createRequire` 源码桥时 |
 | [packaging.md](./packaging.md) | 打包、安装与层序 | 打包安装、交付插件 |
 | [workspace-package.md](./workspace-package.md) | monorepo 内新建包清单与命名 | 在 monorepo 内新建包 |
 | [seams.md](./seams.md) | 核心 seam 与能力服务全表、架构映射 | 查内置服务、归属位置 |

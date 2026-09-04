@@ -27,7 +27,7 @@ DSH 插件可以同时拥有两份代码：主进程半（host，挂在 `apply(c
 
 **Connection RPC 没有这个问题**：channel 字符串 + endpoint 名字 + JSON payload + 信封，是 wire-level 约定，不依赖 module identity。
 
-完整 Typert 路径不靠这份 WeakMap 当唯一真相：generator 把描述符写进 `./remote`，客户端 mount 的是产物，不是装饰器副作用。
+完整 Typert 路径不靠这份 WeakMap 当唯一真相：generator 把描述符写进 `./typert` 与 `./remote`，客户端 mount 的是产物，不是装饰器副作用。
 
 ## 协议形状
 
@@ -136,7 +136,7 @@ export async function callRpc<T>(
 
 ## 反模式（看完就要避开）
 
-- **裸 `@Remote` / `TypertRemoteService`，不跑 generator、不导出 `./remote`**：npm 分发场景必坏。
+- **裸 `@Remote` / `TypertRemoteService`，不跑 generator、不导出 `./typert` + `./remote`**：npm 分发场景必坏。
 - **手写并维护 `invocations[]` manifest**：等同于重复维护一遍类型；RPC 用 TypeScript 联合 + 信封，Typert 用 generator 产物。
 - **`createRequire` 桥接到 deepseek-harness 源码树**：对外发布插件不要用。
 - **throw 异常出 `dispatch`**：丢失 `code`，面板只能显示 "Service error: Internal error"。
@@ -159,7 +159,7 @@ export async function callRpc<T>(
 
 - [ ] 删除手写 `src/typert*.ts`、`client/typert-remote.ts`、`invocations[]`
 - [ ] 去掉 `createRequire` / `DSH_HARNESS_ROOT` 源码桥
-- [ ] 若没有完整 generator + `./remote`：去掉方法上的裸 `@Remote()`，改普通 `Service`
+- [ ] 若没有完整 generator + `./typert` + `./remote`：去掉方法上的裸 `@Remote()`，改普通 `Service`
 - [ ] `shared.ts` 加 `RPC_CHANNEL`、`RpcResult<T>`、`Endpoint` 联合
 - [ ] host：`inject: ['connection']`，`ctx.effect` 里 `handle(channel, dispatch, {authority:'loopback'})`，`return () => { void dispose() }`
 - [ ] client：`callRpc<T>` + 自定义错误类；面板直接拿 `ctx`，不要 mount 手写 manifest
